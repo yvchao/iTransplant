@@ -86,7 +86,7 @@ def benchmark(data_dir,
             existing_benchmarks = pd.read_csv(benchmark_results_file,
                                               index_col=0)
             if description in existing_benchmarks['description'].unique():
-                tbar.update(i)
+                tbar.update(1)
                 continue
             else:
                 records.append(existing_benchmarks)
