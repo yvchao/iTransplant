@@ -1,6 +1,6 @@
-# iTransplant
+# iTransplant (individualized TRANSparent Policy Learning for orgAN Transplantation)
 
-Source code for the paper "Closing the loop in medical decision support by understanding clinical decision-making: A case study on organ transplantation" submitted to NeurIPS 2021.
+Source code for the paper "Closing the loop in medical decision support by understanding clinical decision-making: A case study on organ transplantation" accepted by NeurIPS 2021.
 
 ## Experiment environment set up
 
@@ -59,7 +59,7 @@ The main results in our paper can be obtained by executing the following noteboo
 
 To reprocude our results, delete all files inside the **report** directory and rerun all three notebooks mentioned above.
 
-Configurations used for hyperparameter selection and benchmark can be found in **hyperparameter_selection_configures.py**,
+Configurations used for hyperparameter selection and benchmark can be found in **hyperparameter_selection_configures.py**
 and
 **hyperparameter_selection_configures.py**,
 respectively.
