@@ -8,15 +8,7 @@ from .lowess import LowessEstimator
 from .random_forest import RandomForestEstimator
 
 __all__ = [
-    "iTransplantEstimator",
-    "INVASEEstimator",
-    "BCEstimator",
-    "DecisionTreeEstimator",
-    "LASSOEstimator",
-    "LogisticEstimator",
-    "LowessEstimator",
-    "RandomForestEstimator"
+    "iTransplantEstimator", "INVASEEstimator", "BCEstimator",
+    "DecisionTreeEstimator", "LASSOEstimator", "LogisticEstimator",
+    "LowessEstimator", "RandomForestEstimator"
 ]
-
-
-
