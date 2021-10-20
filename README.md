@@ -65,7 +65,7 @@ and
 respectively.
 
 ## Notes on reproducibility
-The experiments in our paper are conducted on a custom limited dataset (covering organ offers from January 1, 2003 to December 4, 2020) from OPTN.
+The experiments in our paper are conducted on a custom limited dataset (covering organ offers from January 1, 2003 to December 4, 2020) from [OPTN](https://optn.transplant.hrsa.gov/).
 
 There could be minor variations in the experiment results due to differences in:
 - Operating systems
