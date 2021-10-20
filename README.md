@@ -64,7 +64,7 @@ and
 **hyperparameter_selection_configures.py**,
 respectively.
 
-## Note on reproducibility
+## Notes on reproducibility
 The experiments in our paper are conducted on a custom limited dataset (covering organ offers from January 1, 2003 to December 4, 2020) from OPTN.
 
 There could be minor variations in the experiment results due to differences in:
@@ -72,3 +72,5 @@ There could be minor variations in the experiment results due to differences in:
 - Python versions
 - Versions of third-party dependencies. 
 - Liver transplant data from OPTN
+
+Our code currently does **not** support execution on CUDA decives.
