@@ -90,7 +90,7 @@ def hyperparameter_search(data_dir,
         hyperparameter_selection_result = os.path.join(
             report_dir, f'{description}-hyperparameter-tune.csv')
         if os.path.exists(hyperparameter_selection_result):
-            tbar.update(i)
+            tbar.update(1)
             continue
 
         tbar.set_description(
