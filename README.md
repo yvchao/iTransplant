@@ -11,7 +11,7 @@ The installed linux distribution is **Debian GNU/Linux 10 (buster)** with the fo
 Linux XXPro-13 4.19.104-microsoft-standard #1 SMP Wed Feb 19 06:37:35 UTC 2020 x86_64 GNU/Linux
 ```
 
-The python environment is created with **pyenv** version 1.2.23 via 
+The python environment is created with **pyenv** (version 1.2.23) via 
 ```bash
 > pyenv install 3.8.7
 ```
@@ -61,7 +61,7 @@ To reprocude our results, delete all files inside the **report** directory and r
 
 Configurations used for hyperparameter selection and benchmark can be found in **hyperparameter_selection_configures.py**
 and
-**hyperparameter_selection_configures.py**,
+**benchmark_configures.py**,
 respectively.
 
 ## Notes on reproducibility
