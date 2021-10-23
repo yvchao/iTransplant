@@ -157,7 +157,7 @@ def population_level_decision_drivers(center, X_test, y_test, data_dict,
             zorder=-1)
     ax.set_xlim([-0.9, 0.9])
     highlight_criteria = [
-        'Donor Age', 'MELD-Na', 'MELD', 'Donor Weight', 'Donor AST',
+        'Donor Age', 'MELD-Na', 'MELD', 'Donor Weight',
         'National Donor', 'Local Donor', 'Regional Donor',
         'HCV Positive Donor', 'HBV Positive Donor',
         'Donation After Natural Death', 'Non-heart-beating Donation',
@@ -652,7 +652,7 @@ def cross_center_variation(center_A,
     ret['donor features'] = df
 
     ret['P_A'] = a_pred[idx]
-    ret['P_B'] = a_pred1[idx],
+    ret['P_B'] = a_pred1[idx]
     ret['action'] = a[idx]
 
     patient_feature = raw_patient_features[idx]
