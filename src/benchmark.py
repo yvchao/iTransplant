@@ -86,7 +86,6 @@ def benchmark(data_dir,
             existing_benchmarks = pd.read_csv(benchmark_results_file,
                                               index_col=0)
             if description in existing_benchmarks['description'].unique():
-                tbar.update(1)
                 continue
             else:
                 records.append(existing_benchmarks)
@@ -114,7 +113,7 @@ def benchmark(data_dir,
     tbar.close()
 
 
-def summarize_benchmark(report_dir, return_tables=True):
+def summarize_benchmark(report_dir, return_tables=True, use_redefined_row_order=True):
     benchmark_results_file = os.path.join(report_dir, 'benchmarks.csv')
     benchmark_results = pd.read_csv(benchmark_results_file, index_col=0)
 
@@ -134,7 +133,10 @@ def summarize_benchmark(report_dir, return_tables=True):
         'Decision Tree', 'Per-cluster Decision Tree', 'LOWESS', 'LASSO',
         'Random Forest', 'INVASE', 'BC', 'iTransplant'
     ]
-    stats = stats.set_index('model').reindex(row_order)
+    if use_redefined_row_order:
+        stats = stats.set_index('model').reindex(row_order)
+    else:
+        stats = stats.set_index('model')
     print('==== Summary of benchmark results ====')
     print(stats.to_markdown())
     if return_tables:
