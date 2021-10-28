@@ -9,7 +9,8 @@ class MLP(nn.Module):
         if self.layer_n > 1:
             self.input_layer = nn.Linear(in_n, h_n)
             self.middle_layers = nn.ModuleList(
-                [nn.Linear(h_n, h_n) for i in range(layer_n - 2)])
+                [nn.Linear(h_n, h_n) for i in range(layer_n - 2)]
+            )
             self.output_layer = nn.Linear(h_n, out_n)
             self.activation = nn.LeakyReLU()
         else:

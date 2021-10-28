@@ -11,7 +11,7 @@ The installed linux distribution is **Debian GNU/Linux 10 (buster)** with the fo
 Linux XXPro-13 4.19.104-microsoft-standard #1 SMP Wed Feb 19 06:37:35 UTC 2020 x86_64 GNU/Linux
 ```
 
-The python environment is created with **pyenv** (version 1.2.23) via 
+The python environment is created with **pyenv** (version 1.2.23) via
 ```bash
 > pyenv install 3.8.7
 ```
@@ -70,7 +70,7 @@ The experiments in our paper are conducted on a custom limited dataset (covering
 There could be minor variations in the experiment results due to differences in:
 - Operating systems
 - Python versions
-- Versions of third-party dependencies. 
+- Versions of third-party dependencies.
 - Liver transplant data from OPTN
 
 Our code currently does **not** support execution on CUDA decives.
