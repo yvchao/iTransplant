@@ -1,24 +1,22 @@
-import torch
 import datetime
-import tqdm
+import os
+
 import numpy as np
 import torch
 import torch.optim as optim
-from torch.utils.data import Subset, DataLoader
-import os
-import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
-from sklearn.utils import check_random_state
-from sklearn.model_selection import StratifiedShuffleSplit
-from sklearn.metrics import average_precision_score
-
+import tqdm
 from pkg_resources import resource_filename
+from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.metrics import average_precision_score
+from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.utils import check_random_state
+from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
+from torch.utils.data import DataLoader, Subset
 
 
 def summary(metrics):
-    info = [f'{metric}:{value:.3f}' for metric, value in metrics.items()]
-    return ','.join(info)
+    info = [f"{metric}:{value:.3f}" for metric, value in metrics.items()]
+    return ",".join(info)
 
 
 def clone_state_dict(model):
@@ -46,9 +44,7 @@ class Estimator(BaseEstimator, ClassifierMixin):
 
     def score(self, X, y, sample_weight=None):
         y_pred = self.predict_proba(X)
-        return average_precision_score(y,
-                                       y_pred[:, 1],
-                                       sample_weight=sample_weight)
+        return average_precision_score(y, y_pred[:, 1], sample_weight=sample_weight)
 
 
 class NeuralEstimator(Estimator):
@@ -68,8 +64,8 @@ class NeuralEstimator(Estimator):
             loss.backward(retain_graph=retain_graph)
             optimizer.step()
             total_loss += loss.item()
-            data_size += len(data['x'])
-        #return total_loss/data_size
+            data_size += len(data["x"])
+        # return total_loss/data_size
         return total_loss / len(dataloader)
 
     def _validation(self, dataloader):
@@ -81,20 +77,22 @@ class NeuralEstimator(Estimator):
                 nn_out = self._nn(data)
                 loss = self.eval_loss(data, nn_out)
                 total_loss += loss.item()
-                data_size += len(data['x'])
-        #return total_loss/data_size
+                data_size += len(data["x"])
+        # return total_loss/data_size
         return total_loss / len(dataloader)
 
-    def fit(self,
-            X,
-            y,
-            max_iter=10,
-            batch_size=256,
-            learning_rate=1e-3,
-            retain_graph=False,
-            tolerance=3,
-            validation_split=None,
-            verbose=False):
+    def fit(
+        self,
+        X,
+        y,
+        max_iter=10,
+        batch_size=256,
+        learning_rate=1e-3,
+        retain_graph=False,
+        tolerance=3,
+        validation_split=None,
+        verbose=False,
+    ):
         X, y = check_X_y(X, y, accept_sparse=True)
 
         random_state = check_random_state(self.random_state)
@@ -111,9 +109,9 @@ class NeuralEstimator(Estimator):
         self.classes_ = dataset.y_labels
 
         if validation_split is not None:
-            sss = StratifiedShuffleSplit(n_splits=1,
-                                         test_size=validation_split,
-                                         random_state=random_state)
+            sss = StratifiedShuffleSplit(
+                n_splits=1, test_size=validation_split, random_state=random_state
+            )
             train_set, valid_set = None, None
             for train_index, valid_index in sss.split(dataset.x, dataset.y):
                 train_set = Subset(dataset, train_index)
@@ -127,10 +125,7 @@ class NeuralEstimator(Estimator):
 
         optimizer = optim.AdamW(self._nn.parameters(), lr=learning_rate)
 
-        tbar = tqdm.trange(max_iter,
-                           position=0,
-                           leave=True,
-                           disable=not verbose)
+        tbar = tqdm.trange(max_iter, position=0, leave=True, disable=not verbose)
         training_history = np.full(max_iter, np.NaN)
 
         best_validation_loss = 1e30
@@ -140,10 +135,10 @@ class NeuralEstimator(Estimator):
         for epoch in tbar:
             train_loss = self._train(optimizer, train_dataloader, retain_graph)
             training_history[epoch] = train_loss
-            metrics_train = {'train loss': train_loss}
+            metrics_train = {"train loss": train_loss}
             if valid_dataloader is not None:
                 validation_loss = self._validation(valid_dataloader)
-                metrics_eval = {'valid loss': validation_loss}
+                metrics_eval = {"valid loss": validation_loss}
                 if best_validation_loss > validation_loss:
                     best_validation_loss = validation_loss
                     no_improvement_count = 0
@@ -158,13 +153,13 @@ class NeuralEstimator(Estimator):
             if no_improvement_count >= tolerance:
                 if verbose:
                     print(
-                        f'loss does not improve in {tolerance} epoches, stop training at epoch {epoch}, current loss: {validation_loss}'
+                        f"loss does not improve in {tolerance} epoches, stop training at epoch {epoch}, current loss: {validation_loss}"
                     )
 
                 if best_model != {}:
                     self._nn.load_state_dict(best_model)
                     if verbose:
-                        print('reloaded the best known model parameters')
+                        print("reloaded the best known model parameters")
                 self.save_model(name="best")
 
                 break
@@ -191,9 +186,9 @@ class NeuralEstimator(Estimator):
 
         path = resource_filename("src", path_tail)
         checkpoint = {
-            'model_state_dict': self._nn.state_dict(),
-            'x_dim': self.x_dim,
-            'c_dim': self.c_dim
+            "model_state_dict": self._nn.state_dict(),
+            "x_dim": self.x_dim,
+            "c_dim": self.c_dim,
         }
         torch.save(checkpoint, path)
 
@@ -207,10 +202,10 @@ class NeuralEstimator(Estimator):
         if os.path.exists(path):
             self.is_fitted_ = False
             checkpoint = torch.load(path)
-            self.x_dim = checkpoint['x_dim']
-            self.c_dim = checkpoint['c_dim']
+            self.x_dim = checkpoint["x_dim"]
+            self.c_dim = checkpoint["c_dim"]
             self._nn = self.generate_model()
-            self._nn.load_state_dict(checkpoint['model_state_dict'])
+            self._nn.load_state_dict(checkpoint["model_state_dict"])
             self.is_fitted_ = True
         else:
-            raise Exception(f'no model found in {path}')
+            raise Exception(f"no model found in {path}")

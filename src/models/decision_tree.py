@@ -1,22 +1,25 @@
-from src.models.base_estimator import Estimator
 import numpy as np
-from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
-from src.data_loading import OrganOfferDataset
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.cluster import KMeans
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils import check_random_state
+from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
+
+from src.data_loading import OrganOfferDataset
+from src.models.base_estimator import Estimator
 
 
 class DecisionTreeEstimator(Estimator):
-    def __init__(self,
-                 input_space,
-                 criteria_space,
-                 data_description,
-                 max_depth=10,
-                 n_clusters=10,
-                 degree=1,
-                 random_state=None,
-                 **kwargs):
+    def __init__(
+        self,
+        input_space,
+        criteria_space,
+        data_description,
+        max_depth=10,
+        n_clusters=10,
+        degree=1,
+        random_state=None,
+        **kwargs
+    ):
         self.name = "Decision Tree"
         self.input_space = input_space
         self.criteria_space = criteria_space
@@ -28,30 +31,32 @@ class DecisionTreeEstimator(Estimator):
 
     def get_params(self, deep=True):
         parameters = {
-            'input_space': self.input_space,
-            'criteria_space': self.criteria_space,
-            'data_description': self.data_description,
-            'n_clusters': self.n_clusters,
-            'random_state': self.random_state,
-            'max_depth': self.max_depth,
-            'degree': self.degree,
+            "input_space": self.input_space,
+            "criteria_space": self.criteria_space,
+            "data_description": self.data_description,
+            "n_clusters": self.n_clusters,
+            "random_state": self.random_state,
+            "max_depth": self.max_depth,
+            "degree": self.degree,
         }
 
         return parameters
 
     def create_decision_tree(self, random_state, max_depth):
-        return DecisionTreeClassifier(random_state=random_state,
-                                      class_weight='balanced',
-                                      max_depth=max_depth)
+        return DecisionTreeClassifier(
+            random_state=random_state, class_weight="balanced", max_depth=max_depth
+        )
 
     def create_dataset(self, X, y, fake_y=False):
-        return OrganOfferDataset(X,
-                                 y,
-                                 self.input_space,
-                                 self.criteria_space,
-                                 self.data_description,
-                                 degree=self.degree,
-                                 fake_y=fake_y)
+        return OrganOfferDataset(
+            X,
+            y,
+            self.input_space,
+            self.criteria_space,
+            self.data_description,
+            degree=self.degree,
+            fake_y=fake_y,
+        )
 
     def fit(self, X, y, **kwargs):
         X, y = check_X_y(X, y, accept_sparse=True)
@@ -69,8 +74,7 @@ class DecisionTreeEstimator(Estimator):
             for i in range(self.n_clusters)
         ]
 
-        self.cls = KMeans(n_clusters=self.n_clusters,
-                          random_state=random_state)
+        self.cls = KMeans(n_clusters=self.n_clusters, random_state=random_state)
         c_labels = self.cls.fit_predict(patient_features)
         for i in range(self.n_clusters):
             mask = c_labels == i
@@ -86,9 +90,9 @@ class DecisionTreeEstimator(Estimator):
 
     def predict_proba(self, X):
         X = check_array(X, accept_sparse=True)
-        check_is_fitted(self, 'is_fitted_')
+        check_is_fitted(self, "is_fitted_")
 
-        y = np.zeros((len(X), ))
+        y = np.zeros((len(X),))
 
         dataset = self.create_dataset(X, y, fake_y=True)
         patient_features = dataset.x
