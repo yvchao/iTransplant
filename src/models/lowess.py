@@ -1,18 +1,21 @@
-from src.models.base_estimator import Estimator
 import numpy as np
-from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
+from sklearn.utils.validation import check_array, check_is_fitted, check_X_y
+
 from src.data_loading import OrganOfferDataset
+from src.models.base_estimator import Estimator
 
 
 class LowessEstimator(Estimator):
-    def __init__(self,
-                 input_space,
-                 criteria_space,
-                 data_description,
-                 tau=1.0,
-                 degree=1,
-                 random_state=None,
-                 **kwargs):
+    def __init__(
+        self,
+        input_space,
+        criteria_space,
+        data_description,
+        tau=1.0,
+        degree=1,
+        random_state=None,
+        **kwargs
+    ):
         self.name = "LOWESS"
         self.input_space = input_space
         self.criteria_space = criteria_space
@@ -23,24 +26,26 @@ class LowessEstimator(Estimator):
 
     def get_params(self, deep=True):
         parameters = {
-            'input_space': self.input_space,
-            'criteria_space': self.criteria_space,
-            'data_description': self.data_description,
-            'tau': self.tau,
-            'random_state': self.random_state,
-            'degree': self.degree,
+            "input_space": self.input_space,
+            "criteria_space": self.criteria_space,
+            "data_description": self.data_description,
+            "tau": self.tau,
+            "random_state": self.random_state,
+            "degree": self.degree,
         }
 
         return parameters
 
     def create_dataset(self, X, y, fake_y=False):
-        return OrganOfferDataset(X,
-                                 y,
-                                 self.input_space,
-                                 self.criteria_space,
-                                 self.data_description,
-                                 degree=self.degree,
-                                 fake_y=fake_y)
+        return OrganOfferDataset(
+            X,
+            y,
+            self.input_space,
+            self.criteria_space,
+            self.data_description,
+            degree=self.degree,
+            fake_y=fake_y,
+        )
 
     def fit(self, X, y, **kwargs):
         X, y = check_X_y(X, y, accept_sparse=True)
@@ -62,17 +67,23 @@ class LowessEstimator(Estimator):
         c = self._c_train
         y = self._y_train[:, np.newaxis]
         cc = c[:, :, np.newaxis] @ c[:, np.newaxis, :]
-        w = np.exp(-(np.linalg.norm(x0 - x, ord=2, axis=1, keepdims=True) /
-                     self.tau)**2 / 2)
+        w = np.exp(
+            -((np.linalg.norm(x0 - x, ord=2, axis=1, keepdims=True) / self.tau) ** 2)
+            / 2
+        )
         b = np.bmat([[np.sum(w * y, axis=0)], [np.sum(w * y * c, axis=0)]]).T
-        A = np.bmat([[
-            np.sum(w, axis=0)[:, np.newaxis],
-            np.sum(w * y * c, axis=0)[np.newaxis, :]
-        ],
-                     [
-                         np.sum(w * c, axis=0)[:, np.newaxis],
-                         np.sum(w[:, :, np.newaxis] * cc, axis=0)
-                     ]])
+        A = np.bmat(
+            [
+                [
+                    np.sum(w, axis=0)[:, np.newaxis],
+                    np.sum(w * y * c, axis=0)[np.newaxis, :],
+                ],
+                [
+                    np.sum(w * c, axis=0)[:, np.newaxis],
+                    np.sum(w[:, :, np.newaxis] * cc, axis=0),
+                ],
+            ]
+        )
         beta = np.linalg.lstsq(A, b, rcond=None)[0]
         beta = beta.A[:, 0]
         y0_pred = beta[0] + beta[1:] @ c0[0]
@@ -80,9 +91,9 @@ class LowessEstimator(Estimator):
 
     def get_feature_importance(self, X):
         X = check_array(X, accept_sparse=True)
-        check_is_fitted(self, 'is_fitted_')
+        check_is_fitted(self, "is_fitted_")
 
-        y = np.zeros((len(X), ))
+        y = np.zeros((len(X),))
 
         dataset = self.create_dataset(X, y, fake_y=True)
         X = dataset.x
@@ -101,9 +112,9 @@ class LowessEstimator(Estimator):
 
     def get_counterfactual_predict(self, X, W, W0):
         X = check_array(X, accept_sparse=True)
-        check_is_fitted(self, 'is_fitted_')
+        check_is_fitted(self, "is_fitted_")
 
-        y = np.zeros((len(X), ))
+        y = np.zeros((len(X),))
 
         dataset = self.create_dataset(X, y, fake_y=True)
         criteria = dataset.c
@@ -111,9 +122,9 @@ class LowessEstimator(Estimator):
 
     def predict_proba(self, X):
         X = check_array(X, accept_sparse=True)
-        check_is_fitted(self, 'is_fitted_')
+        check_is_fitted(self, "is_fitted_")
 
-        y = np.zeros((len(X), ))
+        y = np.zeros((len(X),))
 
         dataset = self.create_dataset(X, y, fake_y=True)
         X = dataset.x

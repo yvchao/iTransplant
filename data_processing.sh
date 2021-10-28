@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-cd data_preparing 
+cd data_preparing
 OUTPUT_DIR=Processed\ Data
 mkdir -p "$OUTPUT_DIR"
 log_file="data_processing.log"
