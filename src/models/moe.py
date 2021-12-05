@@ -1,3 +1,8 @@
+# The Mixture-of-Experts module in this script is borrowed from the implementation in
+# https://github.com/davidmrau/mixture-of-experts/blob/master/moe.py
+# Minor changes are applied to fit the iTransplant framework.
+# In the meantime, the way of vector element ranking is improved to ensure reproducibility of the experts selection outcome.
+
 # Sparsely-Gated Mixture-of-Experts Layers.
 # See "Outrageously Large Neural Networks"
 # https://arxiv.org/abs/1701.06538
