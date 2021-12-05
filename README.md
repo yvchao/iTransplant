@@ -5,34 +5,33 @@ ITransplant is a novel data-driven framework to learn interpretable organ offer 
 It learns a patient-wise parametrization of the expert clinician policy that accounts for the differences between patients, a crucial but often overlooked factor in organ transplantation. 
 We conducted several investigative experiments with real-world liver transplantation data from the Organ Procurement and Transplantation Network (OPTN), covering 190,525 organ offers. 
 The results show that iTransplant can be used to probe clinical decision-making practices in a number of ways.
-More specifically, our investigations allow us to: 
-1. identify important match criteria for organ offer acceptance;
-2. discover patient-wise organ preferences of clinicians via automatic patient stratification in a latent representation space;
-3. examine the transplantation practice variations across transplant centers.
+More specifically, our investigations allow us to: (1) identify important match criteria for organ offer acceptance;
+(2) discover patient-wise organ preferences of clinicians via automatic patient stratification in a latent representation space;
+and (3) examine the transplantation practice variations across transplant centers.
 
 ## Installation & Environment Setup
 
-To run the experiment locally, directly clone this repository via the following command.
+To run the experiments locally, directly clone this repository via the following command.
 ```bash
-> git clone git@github.com:yvchao/iTransplant.git
+git clone git@github.com:yvchao/iTransplant.git
 ```
 
 We recommand creating the Python environment with **pyenv** (version 1.2.23) as follows.
 ```bash
-> pyenv install 3.8.7
+pyenv install 3.8.7
 ```
 Python of version 3.8.7 is preferred for best compatibility and reproducibility.
 
 Make sure to install necessary dependencies with the provided **requirements.txt** before conducting any experiment with iTransplant.
 ```bash
-> pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Data Preparation
-The liver transplantation data from OPTN is used for experiments in the paper. Please refer to the README.md file under the **OPTN_data** directory for instructions on how to obtain the dataset.
-The considered feature variables are listed in the *selected_features.py* file under the same path.
-Note that the liver transplantation data, waiting list history data and match run data (organ cllocation and associated decisions on organ offers) are necessary.
-The processed data need to be stored in HDF5 format with speficied keys. Please refer to [src/data_loading/data_utils.py](https://github.com/yvchao/iTransplant/blob/4fe0ce6962e109b020c440827d116fdca5b7617f/src/data_loading/data_utils.py#L7) for details.
+The liver transplantation data from OPTN is used for experiments in the paper. Please refer to the [README.md](https://github.com/yvchao/iTransplant/blob/main/OPTN_data/README.md) file under the **OPTN_data** directory for instructions on how to obtain the dataset.
+The considered feature variables are listed in the [selected_features.py](https://github.com/yvchao/iTransplant/blob/main/OPTN_data/selected_features.py) file under the same path.
+Note that the liver transplantation data, waiting list history data and match run data (organ cllocation and associated decisions on organ offers) are required.
+The processed data need to be stored in [HDF5](https://www.h5py.org/) format with speficied keys. Please refer to [src/data_loading/data_utils.py](https://github.com/yvchao/iTransplant/blob/4fe0ce6962e109b020c440827d116fdca5b7617f/src/data_loading/data_utils.py#L7) for details.
 Please put all processed data in the **data** folder to run experiments.
 
 ## Main Results

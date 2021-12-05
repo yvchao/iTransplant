@@ -60,7 +60,8 @@ def Actor_Loss(data_in, net_out, lambda_=0.1, eps=1e-8):
     )
     return torch.mean(actor_loss)
 
-
+# This function for pairwaise distances calculation comes from
+# https://discuss.pytorch.org/t/efficient-distance-matrix-computation/9065
 def pairwise_distances(x):
     """
     Input: x is a Nxd matrix

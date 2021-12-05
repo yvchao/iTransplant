@@ -1,3 +1,7 @@
+# Implementation for the INVASE approach,
+# please refer to the paper for details.
+# https://openreview.net/forum?id=BJg_roAcK7
+
 import os
 
 import numpy as np
